@@ -18,10 +18,10 @@ import Admin from './pages/Admin';
 import Spot from './pages/Spot';
 import Navbar from './components/MyNav'
 
-const Layout = ({ token, isAdmin }) => {
+const Layout = ({ token, isAdmin, setToken }) => {
   return (
     <>
-      <Navbar isLogin={token} isAdmin={isAdmin} />
+      <Navbar token={token} isAdmin={isAdmin} setToken={setToken} />
       <Outlet />
     </>
   )
@@ -29,7 +29,8 @@ const Layout = ({ token, isAdmin }) => {
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuth()
-  return token ? <Outlet /> : <Navigate to="/login" replace />
+  let lToken = localStorage.getItem('token')
+  return lToken ? <Outlet /> : <Navigate to="/login" replace />
 }
 
 // const ParseRole = () => {
@@ -38,14 +39,18 @@ const ProtectedRoute = ({ children }) => {
 // }
 
 function App() {
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState(localStorage.getItem('token') || '')
   const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(()=>{
+    localStorage.setItem('token', token)
+  },[token])
 
   return (
     <HashRouter>
       <AuthContext.Provider value={{ token, setToken, isAdmin, setIsAdmin}}>
         <Routes>
-          <Route path='/' element={<Layout token={token} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>}>
+          <Route path='/' element={<Layout token={token} setToken={setToken} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>}>
             <Route path='/' element={<Home />} />
             <Route path='/spot-:spotId' element={<Spot />} />
             <Route path='/login' element={<Login />} />

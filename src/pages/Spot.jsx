@@ -17,8 +17,7 @@ const Spot = () => {
     await axios.get('http://localhost:8888/spots')
       .then((res) => {
         if (res?.data) {
-          let spotIdNum = Number(spotId)
-          const [takeSpot] = res.data.filter(item => item.id === spotIdNum)
+          const [takeSpot] = res.data.filter(item => item._id === spotId)
           setSpot(takeSpot)
         }
       }).catch(err => console.log(err))
@@ -43,7 +42,7 @@ const Spot = () => {
             </Card.Body>
           </Card>
         <NavLink to="/" className='row'>
-          <Button className='btn btn-secondary btn-sm my-2'>返回</Button>
+          <Button className='btn btn-secondary btn-sm my-2'>回首頁</Button>
         </NavLink>
         </div>
       </div>

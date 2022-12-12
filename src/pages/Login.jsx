@@ -2,44 +2,41 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context';
 
 
 const Login = () => {
-  // const Navigate = useNavigate();
+  const navigate = useNavigate()
   const mailRef = useRef()
   const passwordRef = useRef()
   const { setIsAdmin, setToken } = useAuth()
-
-  const [submitData, setSubmitData] = useState({
-    email: "",
-    password: ""
-  })
-
-
 
   const goLogin = async (e) => {
     e.preventDefault()
     const mail = mailRef.current.value
     const password = passwordRef.current.value
-    setSubmitData({ mail, password })
 
-    await axios.post(`http://localhost:8888/users`, submitData)
+    await axios.post(`http://localhost:8888/users`, { mail, password })
       .then(async (res) => {
-        // console.log(res.data)
         if (res?.data?.msg === '登入成功') {
           alert('登入成功')
-          console.log(res?.data?.info?.tId)
           let { role } = res?.data?.info
-          await setIsAdmin(true)
-          await setToken('2233455')
-          window.location.href = `/user-${res?.data?.info?.id}`
+          await setIsAdmin(role === 'admin')
+          await setToken(res?.data?.info?.tId)
+          localStorage.setItem('token', res?.data?.info?.tId)
+          
+          if (role === 'admin') {
+            navigate(`/admin`, { replace: true })
+            localStorage.setItem('isAdmin', true)
+          }
+          if (role === 'user') {
+            navigate(`/user-${res?.data?.info?.id}`, { replace: true })
+          }
         } else if (res?.data?.msg === '您的帳號或密碼錯誤') {
           alert('您的帳號或密碼錯誤')
         }
       }).catch(err => console.log(err))
-
   }
 
 
@@ -55,7 +52,7 @@ const Login = () => {
           <Form.Label>密碼</Form.Label>
           <Form.Control type="password" placeholder="輸入密碼" ref={passwordRef} required />
         </Form.Group>
-        <Button variant="success">
+        <Button variant="success" type='submit'>
           送出
         </Button>
       </Form>

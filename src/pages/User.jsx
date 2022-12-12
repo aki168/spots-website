@@ -8,14 +8,14 @@ const User = () => {
 
   const fetchSpots = async () => {
     const requests = [
-      'https://project-test-mi641qsph-aki168.vercel.app/spots',
-      'https://project-test-chbyxl4da-aki168.vercel.app/users'
+      'http://localhost:8888/spots',
+      'http://localhost:8888/users'
     ]
     await axios.all([...requests.map(url => axios.get(url))])
       .then((res) => {
         const spotsData = res[0].data
         const userData = res[1].data
-        let pickList = userData[0].spotList
+        // let pickList = userData[0].spotList
         let matchedSpots = []
         spotsData.forEach(item => {
           if (item.id in { 2: '', 5: '' }) {

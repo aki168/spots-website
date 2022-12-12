@@ -7,7 +7,7 @@ const Admin = () => {
   const [spots, setSpots] = useState([])
 
   const fetchSpots = async () => {
-    await axios.get('https://project-test-mi641qsph-aki168.vercel.app/spots')
+    await axios.get('http://localhost:8888/spots')
       .then((res) => {
         if (res?.data) {
           setSpots(res.data)

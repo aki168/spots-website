@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-function MyNav({ isLogin }) {
+function MyNav({ isLogin, isAdmin }) {
 
   return (
     <Navbar bg="light" expand="lg">
@@ -14,10 +14,9 @@ function MyNav({ isLogin }) {
           <Nav className="me-auto">
             <Nav.Link href="/#/">首頁</Nav.Link>
             {isLogin ?
-              <>
-                <Nav.Link href="/#/user">會員專區</Nav.Link>
-                <Nav.Link href="/#/admin">後臺管理</Nav.Link>
-              </>
+              <Nav.Link href={isAdmin ? '/#/admin' : '/#/user-:userId'}>
+                {isAdmin ? '後台管理' : '會員中心'}
+              </Nav.Link>
               :
               <>
                 <Nav.Link href="/#/login">登入</Nav.Link>

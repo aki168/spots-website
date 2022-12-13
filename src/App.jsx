@@ -45,7 +45,7 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route element={<ProtectedRoute />}>
               <Route path='/admin' element={<Admin />} />
-              <Route path='/user-:userId' element={<User />} />
+              <Route path='/user' element={<User />} />
             </Route>
           </Route>
         </Routes>

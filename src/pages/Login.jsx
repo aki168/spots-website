@@ -30,7 +30,7 @@ const Login = () => {
             navigate(`/admin`, { replace: true })
           }
           if (role === 'user') {
-            navigate(`/user-${res?.data?.info?.tId}`, { replace: true })
+            navigate(`/user`, { replace: true })
           }
         } else if (res?.data?.msg === '您的帳號或密碼錯誤') {
           alert('您的帳號或密碼錯誤')

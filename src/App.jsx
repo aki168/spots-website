@@ -26,20 +26,17 @@ const Layout = () => {
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuth()
-  let lToken = localStorage.getItem('token')
-  return lToken ? <Outlet /> : <Navigate to="/login" replace />
+  return token ? <Outlet /> : <Navigate to="/login" replace />
 }
 
 
 function App() {
   const [token, setToken] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
 
-
-  // useEffect(() => {
-  // }, [])
   return (
     <HashRouter>
-      <AuthContext.Provider value={{ token, setToken }}>
+      <AuthContext.Provider value={{ token, setToken, isAdmin, setIsAdmin }}>
         <Routes>
           <Route path='/' element={<Layout />}>
             <Route path='/' element={<Home />} />

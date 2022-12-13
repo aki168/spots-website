@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from 'react'
 import Table from 'react-bootstrap/Table';
 import { useNavigate } from 'react-router-dom';
 
+
+
+
 const Admin = () => {
   const spotRef = useRef()
   const infoRef = useRef()
@@ -11,7 +14,7 @@ const Admin = () => {
   const [spots, setSpots] = useState([])
   const navigate = useNavigate()
 
-  const onSubmit = async (e) => {
+  const addSpot = async (e) => {
     e.preventDefault()
     const name = spotRef.current.value
     const description = infoRef.current.value
@@ -68,31 +71,13 @@ const Admin = () => {
           </tr>
         </thead>
         <tbody>
-          {spots.map(item => {
-            const { _id, name, description } = item
-            return (
-              <tr key={_id} className='row'>
-                <td className='col-2'><span style={{ fontSize: "4px" }}>{_id.slice(-6)}</span></td>
-                <td className='col-2'>{name}</td>
-                <td className='col-6'>{description}</td>
-                <td className='col-2'>
-                  <Button
-                    className='btn-info me-1 mb-1' id={_id}>
-                    編輯
-                  </Button>
-                  <Button
-                    className='btn-danger' id={_id}
-                    onClick={delSpot}
-                  >
-                    刪除
-                  </Button>
-                </td>
-              </tr>)
-          })}
+          {spots.map(item => (
+            <Row key={item._id} item={item} delSpot={delSpot} fetchSpots={fetchSpots} />
+          ))}
         </tbody>
       </Table>
 
-      <Form onSubmit={onSubmit} className='bg-light p-3 w-50'>
+      <Form onSubmit={addSpot} className='bg-light p-3 w-50'>
         <h3>GO 新增景點</h3>
         <Form.Group className="mb-3" controlId="name">
           <Form.Label>景點名稱</Form.Label>
@@ -111,6 +96,73 @@ const Admin = () => {
         </Button>
       </Form>
     </div>
+  )
+}
+
+
+const Row = ({ item, delSpot, fetchSpots }) => {
+  const { _id, name, description } = item
+  const [isEdit, setEdit] = useState(false)
+  const [submitEdit, setSubmitEdit] = useState(false)
+  const nameRef = useRef()
+  const desRef = useRef()
+
+  const updateSpot = async () => {
+    const name = nameRef.current.value
+    const description = desRef.current.value
+
+    await axios.patch('https://spots-website-server.vercel.app/spots', { objectId: _id, name, description })
+      .then(res => {
+        console.log(res)
+        if (res?.data?.msg === '修改成功') {
+          alert('修改成功')
+        } else {
+          alert('網路不穩定，請稍後在試')
+        }
+      })
+    setEdit(false)
+    setSubmitEdit(true)
+  }
+
+  const toggleEdit = () => {
+    setEdit(prev => !prev)
+  }
+
+  useEffect(()=>{
+    fetchSpots()
+  },[submitEdit])
+  return (
+    <tr className='row'>
+      <td className='col-2'><span style={{ fontSize: "4px" }}>{_id.slice(-6)}</span></td>
+      <td className='col-2'>
+        {isEdit ? <textarea ref={nameRef} /> : name}
+      </td>
+      <td className='col-6'>
+        {isEdit ? <textarea ref={desRef} className='w-100' /> : description}
+      </td>
+      <td className='col-2'>
+        <Button
+          onClick={toggleEdit}
+          className={`btn-${isEdit ? 'light' : 'info'} me-1 mb-1`} id={_id}>
+          {isEdit ? '取消' : '編輯'}
+        </Button>
+        {isEdit ?
+          <Button
+            className='btn-success' id={_id}
+            onClick={updateSpot}
+          >
+            送出
+          </Button>
+          :
+          <Button
+            className='btn-danger' id={_id}
+            onClick={delSpot}
+          >
+            刪除
+          </Button>
+        }
+      </td>
+    </tr>
   )
 }
 

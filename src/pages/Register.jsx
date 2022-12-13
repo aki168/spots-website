@@ -10,7 +10,6 @@ const Register = () => {
   const mailRef = useRef()
   const passwordRef = useRef()
   const nameRef = useRef()
-  const { setToken } = useAuth()
 
   const goRegister = async (e) => {
     e.preventDefault()

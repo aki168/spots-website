@@ -2,9 +2,94 @@ import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
 import { useState, useEffect, useRef } from 'react'
 import Table from 'react-bootstrap/Table';
-import { useNavigate } from 'react-router-dom';
 
+const Row = ({ item, delSpot, fetchSpots }) => {
+  const { _id, name, description, pictureUrl } = item
+  const [isEdit, setEdit] = useState(false)
+  const [submitEdit, setSubmitEdit] = useState(false)
+  const nameRef = useRef()
+  const desRef = useRef()
+  const urlRef = useRef()
 
+  const updateSpot = async () => {
+    const name = nameRef.current.value
+    const description = desRef.current.value
+
+    await axios.patch('https://spots-website-server.vercel.app/spots', { objectId: _id, name, description })
+      .then(res => {
+        if (res?.data?.msg === '修改成功') {
+          alert('修改成功')
+        } else {
+          alert('網路不穩定，請稍後在試')
+        }
+      })
+    setEdit(false)
+    setSubmitEdit(true)
+  }
+
+  const toggleEdit = () => {
+    setEdit(prev => !prev)
+  }
+
+  useEffect(() => {
+    fetchSpots()
+  }, [submitEdit])
+  return (
+    <tr className='row'>
+      <td className='col-1'><span style={{ fontSize: "4px" }}>{_id.slice(-6)}</span></td>
+      <td className='col-1'>
+        {
+          isEdit ?
+            <textarea ref={nameRef}>{name}</textarea>
+            :
+            name
+        }
+      </td>
+      <td className='col-5'>
+        {
+          isEdit ?
+            <textarea ref={desRef} className='w-100' >{description}</textarea>
+            :
+            description
+        }
+      </td>
+      <td className='col-3 overflow-auto'>
+        {
+          isEdit ?
+            <textarea placeholder={pictureUrl} ref={urlRef} className='w-100' >{pictureUrl}</textarea>
+            :
+            <>
+              <p style={{ fontSize: "4px" }} className='w-50'>
+                {pictureUrl}
+              </p>
+            </>
+        }
+      </td>
+      <td className='col-2'>
+        <Button
+          onClick={toggleEdit}
+          className={`btn-${isEdit ? 'light' : 'info'} me-1 mb-1`} id={_id}>
+          {isEdit ? '取消' : '編輯'}
+        </Button>
+        {isEdit ?
+          <Button
+            className='btn-success' id={_id}
+            onClick={updateSpot}
+          >
+            送出
+          </Button>
+          :
+          <Button
+            className='btn-danger' id={_id}
+            onClick={delSpot}
+          >
+            刪除
+          </Button>
+        }
+      </td>
+    </tr>
+  )
+}
 
 
 const Admin = () => {
@@ -12,7 +97,6 @@ const Admin = () => {
   const infoRef = useRef()
   const urlRef = useRef()
   const [spots, setSpots] = useState([])
-  const navigate = useNavigate()
 
   const addSpot = async (e) => {
     e.preventDefault()
@@ -63,9 +147,10 @@ const Admin = () => {
       <Table responsive="md mb-3">
         <thead>
           <tr className='row'>
-            <th className='col-2'>ID</th>
-            <th className='col-2'>景點名稱</th>
-            <th className='col-6'>介紹</th>
+            <th className='col-1'>ID</th>
+            <th className='col-1'>景點名稱</th>
+            <th className='col-5'>介紹</th>
+            <th className='col-3'>圖片網址</th>
             <th className='col-2'> </th>
           </tr>
         </thead>
@@ -99,70 +184,6 @@ const Admin = () => {
 }
 
 
-const Row = ({ item, delSpot, fetchSpots }) => {
-  const { _id, name, description } = item
-  const [isEdit, setEdit] = useState(false)
-  const [submitEdit, setSubmitEdit] = useState(false)
-  const nameRef = useRef()
-  const desRef = useRef()
 
-  const updateSpot = async () => {
-    const name = nameRef.current.value
-    const description = desRef.current.value
-
-    await axios.patch('https://spots-website-server.vercel.app/spots', { objectId: _id, name, description })
-      .then(res => {
-        console.log(res)
-        if (res?.data?.msg === '修改成功') {
-          alert('修改成功')
-        } else {
-          alert('網路不穩定，請稍後在試')
-        }
-      })
-    setEdit(false)
-    setSubmitEdit(true)
-  }
-
-  const toggleEdit = () => {
-    setEdit(prev => !prev)
-  }
-
-  // useEffect(()=>{
-  //   fetchSpots()
-  // },[submitEdit])
-  return (
-    <tr className='row'>
-      <td className='col-2'><span style={{ fontSize: "4px" }}>{_id.slice(-6)}</span></td>
-      <td className='col-2'>
-        {isEdit ? <textarea ref={nameRef} /> : name}
-      </td>
-      <td className='col-6'>
-        {isEdit ? <textarea ref={desRef} className='w-100' /> : description}
-      </td>
-      <td className='col-2'>
-        <Button
-          onClick={toggleEdit}
-          className={`btn-${isEdit ? 'light' : 'info'} me-1 mb-1`} id={_id}>
-          {isEdit ? '取消' : '編輯'}
-        </Button>
-        {isEdit ?
-          <Button
-            className='btn-success' id={_id}
-            onClick={updateSpot}
-          >
-            送出
-          </Button>
-          :
-          <Button
-            className='btn-danger' id={_id}
-            onClick={delSpot}
-          >
-            刪除
-          </Button>
-        }
-      </td>
-    </tr>
-  )
-}
 
 export default Admin

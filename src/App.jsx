@@ -26,7 +26,7 @@ const Layout = () => {
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuth()
-  return token ? <Outlet /> : <Navigate to="/login" replace />
+  return token ? <Outlet /> : <Navigate to="/" />
 }
 
 

@@ -43,9 +43,16 @@ function MyNav() {
             <Nav.Link href="/#/">首頁</Nav.Link>
             {token ?
               <>
-                <Nav.Link href={isAdmin ? '/#/admin' : '/#/user'}>
-                  {isAdmin ? '後台管理' : '會員中心'}
-                </Nav.Link>
+                {
+                  isAdmin ?
+                    <Nav.Link href='/#/admin'>
+                      後台管理
+                    </Nav.Link>
+                    :
+                    <Nav.Link href='/#/user'>
+                      會員中心
+                    </Nav.Link>
+                }
                 <Button className='btn btn-outline-secondary btn-light ms-5 btn-sm' onClick={logout}>登出</Button>
               </>
               :

@@ -19,7 +19,7 @@ function MyNav() {
   const checkAuth = async () => {
     await axios.post('https://spots-website-server.vercel.app/auth', { token })
       .then((res) => {
-        if (res.data) {
+        if (res.data?.info) {
           const { role } = res?.data?.info
           setIsAdmin(role === 'admin')
         }

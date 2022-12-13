@@ -17,7 +17,7 @@ const Admin = () => {
     const description = infoRef.current.value
     const pictureUrl = urlRef.current.value
 
-    await axios.post('http://localhost:8888/spots', { name, description, pictureUrl })
+    await axios.post('https://spots-website-server.vercel.app/spots', { name, description, pictureUrl })
       .then(res => {
         if (res?.data?.msg === '新增成功') {
           alert('新增成功')
@@ -29,7 +29,7 @@ const Admin = () => {
   }
 
   const fetchSpots = async () => {
-    await axios.get('http://localhost:8888/spots')
+    await axios.get('https://spots-website-server.vercel.app/spots')
       .then((res) => {
         if (res?.data) {
           setSpots(res.data)
@@ -41,7 +41,7 @@ const Admin = () => {
   const delSpot = async (e) => {
     const objectId = e.target.id
     console.log(objectId)
-    await axios.delete('http://localhost:8888/spots', { data: { objectId } })
+    await axios.delete('https://spots-website-server.vercel.app/spots', { data: { objectId } })
       .then(res => {
         if (res?.data?.msg === '刪除成功') {
           alert('刪除成功')
@@ -54,9 +54,6 @@ const Admin = () => {
 
   useEffect(() => {
     fetchSpots()
-    if (!localStorage.getItem('isAdmin')) {
-      navigate(`/`, { replace: true })
-    }
   }, [])
   return (
     <div className='container py-3'>

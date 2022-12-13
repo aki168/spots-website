@@ -1,15 +1,17 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import {Button} from 'react-bootstrap';
-import { useEffect } from 'react';
+import { Button } from 'react-bootstrap';
+import { useEffect,useState } from 'react';
+import { useAuth } from '../context';
 
-function MyNav({ token, isAdmin, setToken }) {
-  let lToken = localStorage.getItem('token')
-  let lAdmin = localStorage.getItem('isAdmin')
+
+function MyNav() {
+
+  const { token, setToken } = useAuth()
+
   const logout = () => {
     localStorage.removeItem('token')
-    localStorage.removeItem('isAdmin')
     setToken('')
   }
 
@@ -23,8 +25,11 @@ function MyNav({ token, isAdmin, setToken }) {
             <Nav.Link href="/#/">首頁</Nav.Link>
             { token ?
               <>
-                <Nav.Link href={lAdmin ? '/#/admin' : '/#/user-:userId'}>
-                  { lAdmin ? '後台管理' : '會員中心'}
+                <Nav.Link href='/#/user-:userId'>
+                  會員中心
+                </Nav.Link>
+                <Nav.Link href='/#/admin'>
+                  後台管理
                 </Nav.Link>
                 <Button className='btn btn-outline-secondary btn-light ms-5 btn-sm' onClick={logout}>登出</Button>
               </>

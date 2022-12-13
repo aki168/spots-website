@@ -10,28 +10,27 @@ const Login = () => {
   const navigate = useNavigate()
   const mailRef = useRef()
   const passwordRef = useRef()
-  const { setIsAdmin, setToken } = useAuth()
+  const { setToken } = useAuth()
 
   const goLogin = async (e) => {
     e.preventDefault()
     const mail = mailRef.current.value
     const password = passwordRef.current.value
 
-    await axios.post(`http://localhost:8888/users`, { mail, password })
+    await axios.post(`https://spots-website-server.vercel.app/users`, { mail, password })
       .then(async (res) => {
+        console.log(res.data)
         if (res?.data?.msg === '登入成功') {
           alert('登入成功')
-          let { role } = res?.data?.info
-          await setIsAdmin(role === 'admin')
-          await setToken(res?.data?.info?.tId)
-          localStorage.setItem('token', res?.data?.info?.tId)
-          
+          await setToken(res?.data?.info?.token)
+          localStorage.setItem('token', res?.data?.info?.token)
+
+          const { role } = res?.data?.info
           if (role === 'admin') {
             navigate(`/admin`, { replace: true })
-            localStorage.setItem('isAdmin', true)
           }
           if (role === 'user') {
-            navigate(`/user-${res?.data?.info?.id}`, { replace: true })
+            navigate(`/user-${res?.data?.info?.tId}`, { replace: true })
           }
         } else if (res?.data?.msg === '您的帳號或密碼錯誤') {
           alert('您的帳號或密碼錯誤')

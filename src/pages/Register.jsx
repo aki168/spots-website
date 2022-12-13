@@ -10,7 +10,7 @@ const Register = () => {
   const mailRef = useRef()
   const passwordRef = useRef()
   const nameRef = useRef()
-  const { setIsAdmin, setToken } = useAuth()
+  const { setToken } = useAuth()
 
   const goRegister = async (e) => {
     e.preventDefault()
@@ -18,7 +18,7 @@ const Register = () => {
     const password = passwordRef.current.value
     const name = nameRef.current.value
 
-    await axios.post(`http://localhost:8888/register`, { mail, password, name, role:"user" })
+    await axios.post(`https://spots-website-server.vercel.app/register`, { mail, password, name, role:"user" })
       .then(async (res) => {
         if (res?.data?.msg === '註冊成功') {
           alert('註冊成功')

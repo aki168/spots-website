@@ -14,7 +14,7 @@ const Spot = () => {
   })
 
   const fetchSpot = async () => {
-    await axios.get('http://localhost:8888/spots')
+    await axios.get('https://spots-website-server.vercel.app/spots')
       .then((res) => {
         if (res?.data) {
           const [takeSpot] = res.data.filter(item => item._id === spotId)

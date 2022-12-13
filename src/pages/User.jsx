@@ -4,31 +4,27 @@ import { useState, useEffect } from 'react'
 import CardItem from '../components/CardItem'
 
 const User = () => {
+  const token = localStorage.getItem('token')
   const [spots, setSpots] = useState([])
 
-  let lToken = localStorage.getItem('token')
-
   const fetchSpots = async () => {
-    const requests = [
-      'http://localhost:8888/spots',
-      'http://localhost:8888/users'
-    ]
-    await axios.all([...requests.map(url => axios.get(url))])
-      .then((res) => {
-        const spotsData = res[0].data
-        const userData = res[1].data.filter(item => item._id === lToken)
-        let pickList = userData[0].spotList
-        let matchedSpots = spotsData.filter(item => {
-          return pickList.includes(item._id) === true
+    const authData = axios.post('https://spots-website-server.vercel.app/auth', { token })
+    const getSpots = axios.get('https://spots-website-server.vercel.app/spots')
+
+    await axios.all([authData, getSpots]).then(axios.spread((...res) => {
+      const userSpotList = res[0].data?.info?.spotList
+      const spotsData = res[1].data
+      let list = []
+      spotsData.forEach(item => {
+        userSpotList.forEach(sId => {
+          if (item._id === sId) {
+            list.push(item)
+          }
         })
-        // let matchedSpots = []
-        // spotsData.forEach(item => {
-        //   if (item.id in { 2: '', 5: '' }) {
-        //     matchedSpots.push(item)
-        //   }
-        // })
-        setSpots(matchedSpots)
-      }).catch(err => console.log(err))
+      })
+      setSpots(list)
+    })
+    )
   }
 
   useEffect(() => {
@@ -42,9 +38,9 @@ const User = () => {
           spots.map(item => {
             const { id, ...props } = item
             return <CardItem key={id} id={id} {...props} />
-          }) : 
+          }) :
           <div className='alert alert-warning w-100'>目前尚未有收藏景點</div>
-          }
+        }
       </div>
     </div>
   )

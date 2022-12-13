@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { NavLink } from 'react-router-dom';
 
-function CardItem({id, name, description, pictureUrl, _id }) {
+function CardItem({_id, name, description, pictureUrl}) {
 
   const formatDesc = (text) => {
     if (text.length > 35) {
@@ -10,12 +10,6 @@ function CardItem({id, name, description, pictureUrl, _id }) {
     }
     return text
   }
-
-  // const goToItem = (e) => {
-  //   console.log(e.target.id)
-  // }
-
-
 
 
   return (

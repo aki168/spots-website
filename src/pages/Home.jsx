@@ -7,7 +7,7 @@ const Home = () => {
   const [spots, setSpots] = useState([])
   
   const fetchSpots = async () => {
-    await axios.get("http://localhost:8888/spots")
+    await axios.get("https://spots-website-server.vercel.app/spots")
       .then((res) => {
         if (res?.data) {
           setSpots(res.data)
@@ -23,8 +23,8 @@ const Home = () => {
       <h2 className='text-dark p-3'>台灣景點網 - 首頁</h2>
       <div className='row'>
         {spots.map(item => {
-          const { id, ...props } = item
-          return <CardItem key={id} id={id} {...props} />
+          const { _id, ...props } = item
+          return <CardItem key={_id} _id={_id} {...props} />
         })}
       </div>
     </div>

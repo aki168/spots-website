@@ -36,7 +36,6 @@ const Admin = () => {
       .then((res) => {
         if (res?.data) {
           setSpots(res.data)
-          console.log(spots)
         }
       }).catch(err => console.log(err))
   }
@@ -128,9 +127,9 @@ const Row = ({ item, delSpot, fetchSpots }) => {
     setEdit(prev => !prev)
   }
 
-  useEffect(()=>{
-    fetchSpots()
-  },[submitEdit])
+  // useEffect(()=>{
+  //   fetchSpots()
+  // },[submitEdit])
   return (
     <tr className='row'>
       <td className='col-2'><span style={{ fontSize: "4px" }}>{_id.slice(-6)}</span></td>

@@ -35,7 +35,7 @@ function CardItem({ _id, name, description, pictureUrl }) {
 
   const pushSpot = async (itemId) => {
     toggleLink()
-    axios.post('http://localhost:8888/pushSpot', { token, objectId: itemId })
+    axios.post('https://spots-website-server.vercel.app/pushSpot', { token, objectId: itemId })
       .then(res => {
         if (res?.data?.msg === '景點收藏成功') {
           alert('景點收藏成功')
@@ -45,7 +45,7 @@ function CardItem({ _id, name, description, pictureUrl }) {
 
   const pullSpot = async (itemId) => {
     toggleLink()
-    axios.post('http://localhost:8888/pullSpot', { token, objectId: itemId })
+    axios.post('https://spots-website-server.vercel.app/pullSpot', { token, objectId: itemId })
       .then(res => {
         if (res?.data?.msg === '景點移除成功') {
           alert('景點移除成功')

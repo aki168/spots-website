@@ -23,9 +23,3 @@
 Email : admin@mail.com
 密碼 : admin999
 ```
-
-本地端啟動:
-```
-npm install
-npm run dev
-```

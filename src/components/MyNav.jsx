@@ -1,5 +1,6 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
+import { NavLink } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import { Button } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
@@ -36,29 +37,29 @@ function MyNav() {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="/#/" className='fw-bold'>台灣景點網</Navbar.Brand>
+        <Navbar.Brand href="/" className='fw-bold'>台灣景點網</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/#/">首頁</Nav.Link>
+            <NavLink to="/">首頁</NavLink>
             {token ?
               <>
                 {
                   isAdmin ?
-                    <Nav.Link href='/#/admin'>
+                    <NavLink to='/admin'>
                       後台管理
-                    </Nav.Link>
+                    </NavLink>
                     :
-                    <Nav.Link href='/#/user'>
+                    <NavLink to='/user'>
                       會員中心
-                    </Nav.Link>
+                    </NavLink>
                 }
                 <Button className='btn btn-outline-secondary btn-light ms-5 btn-sm' onClick={logout}>登出</Button>
               </>
               :
               <>
-                <Nav.Link href="/#/login">登入</Nav.Link>
-                <Nav.Link href="/#/register">註冊</Nav.Link>
+                <NavLink to="/login">登入</NavLink>
+                <NavLink to="/register">註冊</NavLink>
               </>
             }
           </Nav>

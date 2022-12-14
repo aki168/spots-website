@@ -68,12 +68,12 @@ const Row = ({ item, delSpot, fetchSpots }) => {
       <td className='col-2'>
         <Button
           onClick={toggleEdit}
-          className={`btn-${isEdit ? 'light' : 'info'} me-1 mb-1`} id={_id}>
+          className={`btn-${isEdit ? 'light' : 'info'} me-1 mb-1`} >
           {isEdit ? '取消' : '編輯'}
         </Button>
         {isEdit ?
           <Button
-            className='btn-success' id={_id}
+            className='btn-success' 
             onClick={updateSpot}
           >
             送出

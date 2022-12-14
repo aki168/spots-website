@@ -34,6 +34,7 @@ function MyNav() {
     }
   }, [token])
 
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -41,25 +42,35 @@ function MyNav() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <NavLink to="/">首頁</NavLink>
+            <Nav.Link>
+              <NavLink className='text-dark text-decoration-none' to="/">首頁</NavLink>
+            </Nav.Link>
             {token ?
               <>
                 {
                   isAdmin ?
-                    <NavLink to='/admin'>
-                      後台管理
-                    </NavLink>
+                    <Nav.Link>
+                      <NavLink className='text-dark text-decoration-none' to='/admin'>
+                        後台管理
+                      </NavLink>
+                    </Nav.Link>
                     :
-                    <NavLink to='/user'>
-                      會員中心
-                    </NavLink>
+                    <Nav.Link>
+                      <NavLink className='text-dark text-decoration-none' to='/user'>
+                        會員中心
+                      </NavLink>
+                    </Nav.Link>
                 }
                 <Button className='btn btn-outline-secondary btn-light ms-5 btn-sm' onClick={logout}>登出</Button>
               </>
               :
               <>
-                <NavLink to="/login">登入</NavLink>
-                <NavLink to="/register">註冊</NavLink>
+                <Nav.Link>
+                  <NavLink className='text-dark text-decoration-none' to="/login">登入</NavLink>
+                </Nav.Link>
+                <Nav.Link>
+                  <NavLink className='text-dark text-decoration-none' to="/register">註冊</NavLink>
+                </Nav.Link>
               </>
             }
           </Nav>
